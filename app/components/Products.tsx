@@ -6,7 +6,10 @@ const packages = [
   {
     num: '01',
     name: 'MOUNT BATUR JEEP SUNRISE TOUR',
-    price: 'IDR 650K',
+    prices: {
+      IDR: { value: 'IDR 650K', unit: '/ jeep' },
+      USD: { value: '$35', unit: '/ jeep (2 pax)' },
+    },
     images: [
       '/images/jeep-2.jpeg',
       '/images/jeep-1.jpeg',
@@ -21,7 +24,10 @@ const packages = [
   {
     num: '02',
     name: 'MOUNT BATUR TREKKING VIA PASAR AGUNG',
-    price: 'IDR 550K',
+    prices: {
+      IDR: { value: 'IDR 550K', unit: '/ person' },
+      USD: { value: '$15', unit: '/ person' },
+    },
     images: [
       '/images/jeep-5.jpeg',
       '/images/jeep-6.jpeg',
@@ -54,7 +60,7 @@ const ChevronRight = () => (
   </svg>
 )
 
-function PackageCarousel({ pkg }: { pkg: typeof packages[0] }) {
+function PackageCarousel({ pkg, currency }: { pkg: typeof packages[0]; currency: 'IDR' | 'USD' }) {
   const [active, setActive] = useState(0)
 
   const prev = () => setActive(i => (i === 0 ? pkg.images.length - 1 : i - 1))
@@ -207,10 +213,18 @@ function PackageCarousel({ pkg }: { pkg: typeof packages[0] }) {
               fontSize: 22,
               fontWeight: 700,
               color: '#7B2D1F',
+              marginBottom: 2,
+              whiteSpace: 'nowrap',
+            }}>
+              {pkg.prices[currency].value}
+            </p>
+            <p style={{
+              fontSize: 10,
+              color: '#666',
               marginBottom: 12,
               whiteSpace: 'nowrap',
             }}>
-              {pkg.price}
+              {pkg.prices[currency].unit}
             </p>
             <a
               href="https://wa.me/6281234567890"
@@ -238,11 +252,13 @@ function PackageCarousel({ pkg }: { pkg: typeof packages[0] }) {
 }
 
 export default function Products() {
+  const [currency, setCurrency] = useState<'IDR' | 'USD'>('IDR')
+
   return (
     <section id="products" style={{ backgroundColor: '#EAE6E0', padding: '80px 0' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 36 }}>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-9">
           <div>
             <p style={{
               fontSize: 11,
@@ -264,27 +280,76 @@ export default function Products() {
               CHOOSE YOUR ADVENTURE
             </h2>
           </div>
-          <a
-            href="#contact"
-            style={{
-              fontSize: 11,
-              fontWeight: 600,
-              letterSpacing: '0.1em',
-              color: '#1a1a1a',
-              textDecoration: 'none',
-              border: '1px solid #1a1a1a',
-              padding: '8px 16px',
-              borderRadius: 2,
-            }}
-          >
-            VIEW ALL PACKAGES
-          </a>
+          
+          {/* Controls: Currency Switcher & Button */}
+          <div className="flex items-center gap-4 self-start md:self-auto">
+            {/* Currency Switcher */}
+            <div style={{
+              display: 'inline-flex',
+              backgroundColor: '#D1C9BE',
+              borderRadius: 4,
+              padding: 3,
+              gap: 2,
+            }}>
+              <button
+                onClick={() => setCurrency('IDR')}
+                style={{
+                  padding: '6px 14px',
+                  fontSize: 11,
+                  fontWeight: 700,
+                  borderRadius: 2,
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: currency === 'IDR' ? '#7B2D1F' : 'transparent',
+                  color: currency === 'IDR' ? 'white' : '#444',
+                  transition: 'all 0.2s ease',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                IDR
+              </button>
+              <button
+                onClick={() => setCurrency('USD')}
+                style={{
+                  padding: '6px 14px',
+                  fontSize: 11,
+                  fontWeight: 700,
+                  borderRadius: 2,
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: currency === 'USD' ? '#7B2D1F' : 'transparent',
+                  color: currency === 'USD' ? 'white' : '#444',
+                  transition: 'all 0.2s ease',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                USD
+              </button>
+            </div>
+
+            <a
+              href="#contact"
+              style={{
+                fontSize: 11,
+                fontWeight: 600,
+                letterSpacing: '0.1em',
+                color: '#1a1a1a',
+                textDecoration: 'none',
+                border: '1px solid #1a1a1a',
+                padding: '8px 16px',
+                borderRadius: 2,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              VIEW ALL PACKAGES
+            </a>
+          </div>
         </div>
 
         {/* Package cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {packages.map((pkg) => (
-            <PackageCarousel key={pkg.num} pkg={pkg} />
+            <PackageCarousel key={pkg.num} pkg={pkg} currency={currency} />
           ))}
         </div>
       </div>

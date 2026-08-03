@@ -45,9 +45,14 @@ const stats = [
 export default function About() {
   return (
     <section id="about" style={{ backgroundColor: '#F5F2EE', padding: '80px 0' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', gap: 64, alignItems: 'center' }}>
+      <div 
+        className="max-w-[1200px] mx-auto px-6 flex flex-col lg:flex-row gap-12 lg:gap-16 items-center w-full"
+        style={{
+          margin: '0 auto',
+        }}
+      >
         {/* Left: Text */}
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="w-full lg:flex-1 min-w-0">
           <p style={{
             fontSize: 11,
             fontWeight: 600,
@@ -76,15 +81,12 @@ export default function About() {
           </p>
 
           {/* Stats */}
-          <div style={{ display: 'flex', gap: 0 }}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-2 md:gap-0 mt-8 w-full">
             {stats.map((s, i) => (
-              <div key={i} style={{
-                flex: 1,
-                paddingRight: i < stats.length - 1 ? 24 : 0,
-                borderRight: i < stats.length - 1 ? '1px solid #ddd' : 'none',
-                paddingLeft: i > 0 ? 24 : 0,
-                textAlign: 'center',
-              }}>
+              <div 
+                key={i} 
+                className="text-center px-2 md:px-6 border-r border-transparent odd:border-neutral-300/60 md:border-neutral-300/60 md:last:border-none"
+              >
                 <div style={{ color: '#7B2D1F', marginBottom: 8, display: 'flex', justifyContent: 'center' }}>
                   {s.icon}
                 </div>
@@ -96,7 +98,7 @@ export default function About() {
         </div>
 
         {/* Right: Image */}
-        <div style={{ flexShrink: 0, width: '45%' }}>
+        <div className="w-full lg:w-[45%] flex-shrink-0">
           <img
             src="/images/jeep-1.jpeg"
             alt="Terra Adventure Bali"

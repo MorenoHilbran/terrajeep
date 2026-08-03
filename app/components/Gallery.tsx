@@ -40,7 +40,7 @@ export default function Gallery() {
         </p>
 
         {/* Image row */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 6 }}>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 w-full">
           {visibleImages.map((src, i) => (
             <div key={i} style={{ aspectRatio: '3/4', overflow: 'hidden', borderRadius: 3 }}>
               <img

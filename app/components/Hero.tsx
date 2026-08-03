@@ -39,7 +39,7 @@ export default function Hero() {
   ]
 
   return (
-    <section style={{ position: 'relative', width: '100%', height: '100vh', minHeight: 600, overflow: 'hidden' }}>
+    <section style={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }} className="flex items-center">
       {/* Background image */}
       <img
         src="/images/jeep-2.jpeg"
@@ -50,21 +50,18 @@ export default function Hero() {
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.1) 100%)' }} />
 
       {/* Content */}
-      <div style={{
-        position: 'relative',
-        zIndex: 2,
-        maxWidth: 1200,
-        margin: '0 auto',
-        padding: '0 24px',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-      }}>
+      <div 
+        className="max-w-[1200px] mx-auto px-6 w-full flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10 lg:gap-8 pt-28 pb-16 lg:py-0"
+        style={{
+          position: 'relative',
+          zIndex: 2,
+        }}
+      >
         {/* Left: Text */}
-        <div style={{ flex: 1, maxWidth: 480 }}>
+        <div className="w-full lg:max-w-[480px]">
           <h1 style={{
             fontFamily: 'Georgia, serif',
-            fontSize: 'clamp(42px, 6vw, 72px)',
+            fontSize: 'clamp(38px, 6vw, 72px)',
             fontWeight: 700,
             color: 'white',
             lineHeight: 1.05,
@@ -89,7 +86,7 @@ export default function Hero() {
             fontSize: 14,
             color: 'rgba(255,255,255,0.8)',
             lineHeight: 1.7,
-            maxWidth: 320,
+            maxWidth: 360,
             marginBottom: 36,
           }}>
             Experience the best of Bali's volcanic landscape with our Jeep Tours and Trekking Adventures.
@@ -141,13 +138,7 @@ export default function Hero() {
         </div>
 
         {/* Right: Feature badges */}
-        <div style={{
-          marginLeft: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 16,
-          alignSelf: 'center',
-        }}>
+        <div className="flex flex-row lg:flex-col gap-4 lg:gap-4 lg:ml-auto flex-wrap lg:flex-nowrap w-full lg:w-auto mt-2 lg:mt-0">
           {features.map((f, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{

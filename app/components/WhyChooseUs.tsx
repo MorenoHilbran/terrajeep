@@ -47,16 +47,14 @@ const reasons = [
 export default function WhyChooseUs() {
   return (
     <section style={{ backgroundColor: '#1a1a1a', padding: '72px 0' }}>
-      <div style={{
-        maxWidth: 1200,
-        margin: '0 auto',
-        padding: '0 24px',
-        display: 'flex',
-        gap: 64,
-        alignItems: 'flex-start',
-      }}>
+      <div 
+        className="max-w-[1200px] mx-auto px-6 flex flex-col lg:flex-row gap-10 lg:gap-16 items-start w-full"
+        style={{
+          margin: '0 auto',
+        }}
+      >
         {/* Left: heading */}
-        <div style={{ flexShrink: 0, width: 220 }}>
+        <div className="w-full lg:w-[220px] lg:flex-shrink-0">
           <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.2em', color: '#888', marginBottom: 14, textTransform: 'uppercase' }}>
             Why Choose Us
           </p>
@@ -72,10 +70,10 @@ export default function WhyChooseUs() {
         </div>
 
         {/* Vertical divider */}
-        <div style={{ width: 1, alignSelf: 'stretch', backgroundColor: 'rgba(255,255,255,0.12)', flexShrink: 0 }} />
+        <div className="hidden lg:block w-[1px] self-stretch bg-white/10 flex-shrink-0" />
 
         {/* Right: 4 columns */}
-        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 32 }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
           {reasons.map((r, i) => (
             <div key={i}>
               <div style={{ color: 'rgba(255,255,255,0.75)', marginBottom: 14 }}>{r.icon}</div>

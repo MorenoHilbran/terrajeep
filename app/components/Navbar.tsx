@@ -66,7 +66,7 @@ export default function Navbar() {
 
         {/* Desktop CTA */}
         <a
-          href="https://wa.me/6281234567890"
+          href="https://wa.me/6281216074831"
           target="_blank"
           rel="noopener noreferrer"
           className="hidden md:flex items-center gap-2 bg-[#7B2D1F] text-white py-[9px] px-[18px] rounded-[4px] text-[12px] font-semibold tracking-[0.05em] no-underline"
@@ -128,7 +128,7 @@ export default function Navbar() {
           CONTACT
         </a>
         <a
-          href="https://wa.me/6281234567890"
+          href="https://wa.me/6281216074831"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center gap-2 bg-[#7B2D1F] text-white py-3 px-6 rounded-md text-[13px] font-semibold tracking-[0.05em] no-underline mt-2 shadow-lg active:scale-[0.98] transition-transform"

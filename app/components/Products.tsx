@@ -7,8 +7,8 @@ const packages = [
     num: '01',
     name: 'MOUNT BATUR JEEP SUNRISE TOUR',
     prices: {
-      IDR: { value: 'IDR 650K', unit: '/ jeep' },
-      USD: { value: '$35', unit: '/ jeep (2 pax)' },
+      IDR: { value: 'IDR 475K', unit: '/ jeep (2 pax)' },
+      USD: { value: '$30', unit: '/ jeep (2 pax)' },
     },
     images: [
       '/images/jeep-2.jpeg',
@@ -25,14 +25,14 @@ const packages = [
     num: '02',
     name: 'MOUNT BATUR TREKKING VIA PASAR AGUNG',
     prices: {
-      IDR: { value: 'IDR 550K', unit: '/ person' },
-      USD: { value: '$15', unit: '/ person' },
+      IDR: { value: 'IDR 425K', unit: '/ person' },
+      USD: { value: '$27', unit: '/ person' },
     },
     images: [
-      '/images/jeep-5.jpeg',
-      '/images/jeep-6.jpeg',
-      '/images/jeep-7.jpeg',
-      '/images/jeep-8.jpeg',
+      '/images/tracking-gunungbatur-.jpg',
+      '/images/tracking-gunungbatur-1.jpeg',
+      '/images/tracking-gunungbatur-2.jpeg',
+      '/images/tracking-gunungbatur-3.jpeg',
     ],
     highlights: [
       { left: 'Sunrise Summit Experience', right: 'Scenic Trekking Trail' },
@@ -227,7 +227,7 @@ function PackageCarousel({ pkg, currency }: { pkg: typeof packages[0]; currency:
               {pkg.prices[currency].unit}
             </p>
             <a
-              href="https://wa.me/6281234567890"
+              href="https://wa.me/6281216074831"
               target="_blank"
               rel="noopener noreferrer"
               style={{

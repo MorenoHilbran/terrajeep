@@ -5,9 +5,13 @@ import { useState } from 'react'
 const images = [
   '/images/jeep-1.jpeg',
   '/images/jeep-2.jpeg',
+  '/images/tracking-gunungbatur-.jpg',
   '/images/jeep-3.jpeg',
+  '/images/tracking-gunungbatur-1.jpeg',
   '/images/jeep-4.jpeg',
+  '/images/tracking-gunungbatur-2.jpeg',
   '/images/jeep-5.jpeg',
+  '/images/tracking-gunungbatur-3.jpeg',
   '/images/jeep-6.jpeg',
 ]
 

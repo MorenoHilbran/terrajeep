@@ -7,7 +7,7 @@ const packages = [
     num: '01',
     name: 'MOUNT BATUR JEEP SUNRISE TOUR',
     prices: {
-      IDR: { value: 'IDR 475K', unit: '/ jeep (2 pax)' },
+      IDR: { value: 'IDR 537K', unit: '/ jeep (2 pax)' },
       USD: { value: '$30', unit: '/ jeep (2 pax)' },
     },
     images: [
@@ -25,7 +25,7 @@ const packages = [
     num: '02',
     name: 'MOUNT BATUR TREKKING VIA PASAR AGUNG',
     prices: {
-      IDR: { value: 'IDR 425K', unit: '/ person' },
+      IDR: { value: 'IDR 483K', unit: '/ person' },
       USD: { value: '$27', unit: '/ person' },
     },
     images: [

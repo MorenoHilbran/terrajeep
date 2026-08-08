@@ -60,6 +60,7 @@ const ChevronRight = () => (
   </svg>
 )
 
+
 function PackageCarousel({ pkg, currency }: { pkg: typeof packages[0]; currency: 'IDR' | 'USD' }) {
   const [active, setActive] = useState(0)
 
@@ -246,6 +247,7 @@ function PackageCarousel({ pkg, currency }: { pkg: typeof packages[0]; currency:
             </a>
           </div>
         </div>
+
       </div>
     </div>
   )

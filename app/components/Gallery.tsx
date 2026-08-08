@@ -13,6 +13,7 @@ const images = [
   '/images/jeep-5.jpeg',
   '/images/tracking-gunungbatur-3.jpeg',
   '/images/jeep-6.jpeg',
+  '/images/jeep-7.jpeg',
   '/images/jeep-9.jpeg',
   '/images/jeep-10.jpeg',
   '/images/jeep-11.jpeg',
@@ -22,7 +23,7 @@ const images = [
   '/images/jeep-15.jpeg',
 ]
 
-const VISIBLE = 5
+const VISIBLE = 6
 
 export default function Gallery() {
   const [startIndex, setStartIndex] = useState(0)
@@ -51,7 +52,7 @@ export default function Gallery() {
         </p>
 
         {/* Image row */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 w-full">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1.5 w-full">
           {visibleImages.map((src, i) => (
             <div key={i} style={{ aspectRatio: '3/4', overflow: 'hidden', borderRadius: 3 }}>
               <img

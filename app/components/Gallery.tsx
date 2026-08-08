@@ -13,6 +13,13 @@ const images = [
   '/images/jeep-5.jpeg',
   '/images/tracking-gunungbatur-3.jpeg',
   '/images/jeep-6.jpeg',
+  '/images/jeep-9.jpeg',
+  '/images/jeep-10.jpeg',
+  '/images/jeep-11.jpeg',
+  '/images/jeep-12.jpeg',
+  '/images/jeep-13.jpeg',
+  '/images/jeep-14.jpeg',
+  '/images/jeep-15.jpeg',
 ]
 
 const VISIBLE = 5

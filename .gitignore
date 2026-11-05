@@ -1,4 +1,4 @@
-﻿# Dependencies
+# Dependencies
 node_modules/
 /.pnp
 .pnp.js
@@ -6,12 +6,24 @@ node_modules/
 # Testing
 /coverage
 
-# Next.js
-/.next/
+# Next.js Cache & Dev (Track production build files in .next)
+.next/cache/
+.next/dev/
+.next/diagnostics/
+.next/standalone/
+.next/trace*
 /out/
 
 # Production
 /build
+
+# Uploads & Temporary deployment artifacts
+public/uploads/*
+!public/uploads/.gitkeep
+deployment-final/
+deployment-linux/
+deployment/
+*.zip
 
 # Misc
 .DS_Store
@@ -36,17 +48,3 @@ next-env.d.ts
 # Development files
 dev-output.txt
 dev-error.txt
-
-# Documentation (optional - uncomment to exclude from git)
-# AGENTS.md
-# CLAUDE.md
-# DEPLOYMENT.md
-# IMAGE_GUIDE.md
-# INTEGRASI_SELESAI.md
-# PROJECT_SUMMARY.md
-# QUICKSTART.txt
-# SECURITY_NOTE.md
-# SETUP.md
-# UPDATE_SELESAI.md
-# CLEANUP_GUIDE.txt
-# FINAL_STATUS.md

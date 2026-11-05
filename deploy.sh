@@ -96,19 +96,26 @@ cd "$REPO_DIR"
 git fetch origin main 2>/dev/null || true
 git reset --hard origin/main 2>/dev/null || true
 
+# Hentikan sisa proses build liar jika sebelumnya pernah macet di server
+pkill -f "next build" 2>/dev/null || true
+
+# Salin source code dan pre-built .next (kecuali cache, node_modules, data, uploads)
 tar \
     --exclude='./.git' \
     --exclude='./.env' \
     --exclude='./.env.local' \
     --exclude='./node_modules' \
-    --exclude='./.next' \
+    --exclude='./.next/cache' \
+    --exclude='./.next/dev' \
+    --exclude='./.next/diagnostics' \
+    --exclude='./.next/standalone' \
     --exclude='./data' \
     --exclude='./public/uploads' \
     --exclude='./deploy.sh' \
     --exclude='./.cpanel.yml' \
     -cf - . | tar -C "$APP_DIR" -xf -
 
-# Pastikan data & uploads tetap utuh di APP_DIR
+# Pastikan images publik tersalin
 if [ -d "$REPO_DIR/public/images" ]; then
     mkdir -p "$APP_DIR/public/images" "$PUBLIC_DIR/images"
     cp -rn "$REPO_DIR/public/images/"* "$APP_DIR/public/images/" 2>/dev/null || true
@@ -120,21 +127,25 @@ log "Memeriksa Node.js dependencies"
 
 cd "$APP_DIR"
 
-# Tambahkan path Node.js ke PATH session ini
 NODE_DIR=$(dirname "$NODE_BIN")
 export PATH="$NODE_DIR:$PATH"
 export NEXT_USE_WEBPACK=true
 
 if [ ! -d "$APP_DIR/node_modules" ] || [ "$REPO_DIR/package.json" -nt "$APP_DIR/node_modules" ]; then
-    log "package.json baru terdeteksi, menjalankan npm install..."
-    "$NPM_BIN" install --no-audit --no-fund --legacy-peer-deps
+    log "package.json baru terdeteksi, menjalankan npm install --omit=dev..."
+    "$NPM_BIN" install --omit=dev --no-audit --no-fund --legacy-peer-deps
 else
     log "node_modules sudah mutakhir. Melewati npm install untuk menghemat waktu."
 fi
 
-# 5. Build Next.js Production (menggunakan Webpack agar binary sharp ter-link secara benar)
-log "Menjalankan Next.js production build via Webpack..."
-"$NPM_BIN" run build
+# 5. Build Next.js Production
+# Jika repo sudah menyertakan pre-built .next, lewati npm run build agar tidak membebani CloudLinux CPU/process!
+if [ -f "$APP_DIR/.next/BUILD_ID" ]; then
+    log "Pre-built .next terdeteksi dari repository. Melewati build di server hosting (hemat CPU/RAM & selesai dalam 5 detik)!"
+else
+    log "Build lokal tidak ditemukan, menjalankan Next.js build di server..."
+    "$NPM_BIN" run build
+fi
 
 # 6. Salin static assets ke document root agar dilayani langsung oleh LiteSpeed/Nginx (Cepat & Hemat RAM)
 log "Menyinkronkan static assets ke document root ($PUBLIC_DIR)"
@@ -142,7 +153,7 @@ log "Menyinkronkan static assets ke document root ($PUBLIC_DIR)"
 # Static chunks JS/CSS dari Next.js
 if [ -d "$APP_DIR/.next/static" ]; then
     mkdir -p "$PUBLIC_DIR/_next/static"
-    cp -r "$APP_DIR/.next/static/"* "$PUBLIC_DIR/_next/static/" 2>/dev/null || true
+    cp -rf "$APP_DIR/.next/static/"* "$PUBLIC_DIR/_next/static/" 2>/dev/null || true
 fi
 
 # Public images & icons
@@ -168,4 +179,3 @@ touch "$APP_DIR/tmp/restart.txt"
 [ -d "$PUBLIC_DIR/_next/static" ] || fail "Static assets Next.js tidak ditemukan di document root"
 
 log "DEPLOYMENT TERRA JEEP ADVENTURES BERHASIL"
-

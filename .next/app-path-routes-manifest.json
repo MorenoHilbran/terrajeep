@@ -1,0 +1,15 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/_global-error/page": "/_global-error",
+  "/api/auth/login/route": "/api/auth/login",
+  "/api/auth/logout/route": "/api/auth/logout",
+  "/api/auth/me/route": "/api/auth/me",
+  "/api/gallery/route": "/api/gallery",
+  "/api/packages/route": "/api/packages",
+  "/api/settings/route": "/api/settings",
+  "/icon.jpg/route": "/icon.jpg",
+  "/api/upload/route": "/api/upload",
+  "/admin/page": "/admin",
+  "/login/page": "/login",
+  "/page": "/"
+}

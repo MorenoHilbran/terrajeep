@@ -65,7 +65,7 @@ export default function Contact() {
                 ),
                 value: 'Kintamani, Bali',
                 label: 'Location',
-                link: 'https://maps.google.com/?q=parkir+lama+tour+batur',
+                link: 'https://share.google/csqO5RheRkpH7AVh4',
               },
             ].map((item, i) => (
               <a
@@ -114,7 +114,7 @@ export default function Contact() {
                 Meeting Point / Titik Jemput
               </p>
               <h3 className="font-serif text-xl md:text-2xl font-bold">
-                Parkir Lama Tour Batur
+                Jess Mount Batur and Jeep Sunrise
               </h3>
               <p className="text-white/70 text-xs mt-1">
                 Kintamani, Bangli Regency, Bali 80522
@@ -124,7 +124,7 @@ export default function Contact() {
             {/* Embedded Google Map */}
             <div className="w-full aspect-[4/3] rounded-xl overflow-hidden border border-white/10 relative">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3948.530965512101!2d115.39758330000001!3d-8.249826699999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd1f79a96cbd917%3A0x9b02d378d3b8866c!2sparkir%20lama%20tour%20batur!5e0!3m2!1sid!2sid!4v1785752462243!5m2!1sid!2sid" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7897.548387689686!2d115.39992928504945!3d-8.225448542868893!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd1f1fd19f25749%3A0x9dd797145c7349c2!2sJess%20Mount%20Batur%20and%20Jeep%20Sunrise!5e0!3m2!1sid!2sid!4v1793802327949!5m2!1sid!2sid" 
                 className="absolute inset-0 w-full h-full border-0"
                 allowFullScreen={true}
                 loading="lazy" 
@@ -134,7 +134,7 @@ export default function Contact() {
 
             {/* Direction button */}
             <a 
-              href="https://maps.google.com/?q=parkir+lama+tour+batur"
+              href="https://share.google/csqO5RheRkpH7AVh4"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 w-full bg-white text-[#7B2D1F] hover:bg-white/95 active:scale-[0.98] transition-all py-3.5 px-5 rounded-xl text-xs font-bold tracking-wider uppercase no-underline"

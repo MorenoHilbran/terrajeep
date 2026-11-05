@@ -1,9 +1,11 @@
 'use client'
 
 import { useState } from 'react'
+import type { PackageItem } from '@/lib/data'
 
-const packages = [
+const defaultPackages: PackageItem[] = [
   {
+    id: 'pkg-1',
     num: '01',
     name: 'MOUNT BATUR JEEP SUNRISE TOUR',
     prices: {
@@ -20,8 +22,10 @@ const packages = [
       { left: 'Sunrise Viewpoint', right: 'Black Lava Exploration' },
       { left: '4WD Jeep Adventure', right: 'Hotel Pickup Available' },
     ],
+    whatsappText: 'Hi Terra Adventure, I would like to book Mount Batur Jeep Sunrise Tour',
   },
   {
+    id: 'pkg-2',
     num: '02',
     name: 'MOUNT BATUR TREKKING VIA PASAR AGUNG',
     prices: {
@@ -38,6 +42,7 @@ const packages = [
       { left: 'Sunrise Summit Experience', right: 'Scenic Trekking Trail' },
       { left: 'Experienced Guide', right: 'Breakfast at Summit' },
     ],
+    whatsappText: 'Hi Terra Adventure, I would like to book Mount Batur Trekking via Pasar Agung',
   },
 ]
 
@@ -60,12 +65,23 @@ const ChevronRight = () => (
   </svg>
 )
 
-
-function PackageCarousel({ pkg, currency }: { pkg: typeof packages[0]; currency: 'IDR' | 'USD' }) {
+function PackageCarousel({
+  pkg,
+  currency,
+  whatsappNumber = '6281216074831',
+}: {
+  pkg: PackageItem
+  currency: 'IDR' | 'USD'
+  whatsappNumber?: string
+}) {
   const [active, setActive] = useState(0)
 
-  const prev = () => setActive(i => (i === 0 ? pkg.images.length - 1 : i - 1))
-  const next = () => setActive(i => (i === pkg.images.length - 1 ? 0 : i + 1))
+  const images = pkg.images && pkg.images.length > 0 ? pkg.images : ['/images/jeep-1.jpeg']
+  const prev = () => setActive((i) => (i === 0 ? images.length - 1 : i - 1))
+  const next = () => setActive((i) => (i === images.length - 1 ? 0 : i + 1))
+
+  const waMessage = pkg.whatsappText || `Hi Terra Adventure, I would like to book ${pkg.name}`
+  const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(waMessage)}`
 
   return (
     <div style={{ backgroundColor: 'white', borderRadius: 4, overflow: 'hidden' }}>
@@ -73,7 +89,7 @@ function PackageCarousel({ pkg, currency }: { pkg: typeof packages[0]; currency:
       <div style={{ position: 'relative', aspectRatio: '4/3', backgroundColor: '#111', overflow: 'hidden' }}>
         <img
           key={active}
-          src={pkg.images[active]}
+          src={images[active]}
           alt={pkg.name}
           style={{
             width: '100%',
@@ -101,78 +117,84 @@ function PackageCarousel({ pkg, currency }: { pkg: typeof packages[0]; currency:
         </div>
 
         {/* Prev button */}
-        <button
-          onClick={prev}
-          style={{
-            position: 'absolute',
-            left: 12,
-            top: '50%',
-            transform: 'translateY(-50%)',
-            backgroundColor: 'rgba(0,0,0,0.4)',
-            border: 'none',
-            borderRadius: 2,
-            width: 30,
-            height: 30,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            zIndex: 2,
-          }}
-        >
-          <ChevronLeft />
-        </button>
+        {images.length > 1 && (
+          <button
+            onClick={prev}
+            style={{
+              position: 'absolute',
+              left: 12,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              backgroundColor: 'rgba(0,0,0,0.4)',
+              border: 'none',
+              borderRadius: 2,
+              width: 30,
+              height: 30,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              zIndex: 2,
+            }}
+          >
+            <ChevronLeft />
+          </button>
+        )}
 
         {/* Next button */}
-        <button
-          onClick={next}
-          style={{
-            position: 'absolute',
-            right: 12,
-            top: '50%',
-            transform: 'translateY(-50%)',
-            backgroundColor: 'rgba(0,0,0,0.4)',
-            border: 'none',
-            borderRadius: 2,
-            width: 30,
-            height: 30,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            zIndex: 2,
-          }}
-        >
-          <ChevronRight />
-        </button>
+        {images.length > 1 && (
+          <button
+            onClick={next}
+            style={{
+              position: 'absolute',
+              right: 12,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              backgroundColor: 'rgba(0,0,0,0.4)',
+              border: 'none',
+              borderRadius: 2,
+              width: 30,
+              height: 30,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              zIndex: 2,
+            }}
+          >
+            <ChevronRight />
+          </button>
+        )}
 
         {/* Dot indicators */}
-        <div style={{
-          position: 'absolute',
-          bottom: 12,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          display: 'flex',
-          gap: 6,
-          zIndex: 2,
-        }}>
-          {pkg.images.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setActive(i)}
-              style={{
-                width: i === active ? 20 : 6,
-                height: 6,
-                borderRadius: 3,
-                backgroundColor: i === active ? 'white' : 'rgba(255,255,255,0.5)',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 0,
-                transition: 'width 0.2s',
-              }}
-            />
-          ))}
-        </div>
+        {images.length > 1 && (
+          <div style={{
+            position: 'absolute',
+            bottom: 12,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            gap: 6,
+            zIndex: 2,
+          }}>
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActive(i)}
+                style={{
+                  width: i === active ? 20 : 6,
+                  height: 6,
+                  borderRadius: 3,
+                  backgroundColor: i === active ? 'white' : 'rgba(255,255,255,0.5)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  transition: 'width 0.2s',
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Content */}
@@ -217,7 +239,7 @@ function PackageCarousel({ pkg, currency }: { pkg: typeof packages[0]; currency:
               marginBottom: 2,
               whiteSpace: 'nowrap',
             }}>
-              {pkg.prices[currency].value}
+              {pkg.prices[currency]?.value || pkg.prices.IDR.value}
             </p>
             <p style={{
               fontSize: 10,
@@ -225,10 +247,10 @@ function PackageCarousel({ pkg, currency }: { pkg: typeof packages[0]; currency:
               marginBottom: 12,
               whiteSpace: 'nowrap',
             }}>
-              {pkg.prices[currency].unit}
+              {pkg.prices[currency]?.unit || pkg.prices.IDR.unit}
             </p>
             <a
-              href="https://wa.me/6281216074831"
+              href={waUrl}
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -247,14 +269,19 @@ function PackageCarousel({ pkg, currency }: { pkg: typeof packages[0]; currency:
             </a>
           </div>
         </div>
-
       </div>
     </div>
   )
 }
 
-export default function Products() {
+interface ProductsProps {
+  items?: PackageItem[]
+  whatsappNumber?: string
+}
+
+export default function Products({ items, whatsappNumber }: ProductsProps) {
   const [currency, setCurrency] = useState<'IDR' | 'USD'>('IDR')
+  const packageList = items && items.length > 0 ? items : defaultPackages
 
   return (
     <section id="products" style={{ backgroundColor: '#EAE6E0', padding: '80px 0' }}>
@@ -350,8 +377,13 @@ export default function Products() {
 
         {/* Package cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {packages.map((pkg) => (
-            <PackageCarousel key={pkg.num} pkg={pkg} currency={currency} />
+          {packageList.map((pkg) => (
+            <PackageCarousel
+              key={pkg.id || pkg.num}
+              pkg={pkg}
+              currency={currency}
+              whatsappNumber={whatsappNumber}
+            />
           ))}
         </div>
       </div>

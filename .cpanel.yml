@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export REPO_DIR="/home/sdnt7854/repositories/terrajeep"
+    - /bin/bash /home/sdnt7854/repositories/terrajeep/deploy.sh

@@ -27,3 +27,172 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: Georgia, 'Times New Roman', serif;
 }
+
+/* ============================================================
+   ADMIN THEME STYLES (Light & Dark Mode)
+   Strictly scoped to .admin-theme-light to keep public pages untouched
+   ============================================================ */
+
+.admin-theme-dark {
+  color-scheme: dark;
+}
+
+.admin-theme-light {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  color-scheme: light;
+}
+
+/* Background overrides */
+.admin-theme-light .bg-zinc-950 {
+  background-color: #f8fafc !important;
+}
+
+.admin-theme-light aside,
+.admin-theme-light aside.bg-zinc-950 {
+  background-color: #ffffff !important;
+  border-right-color: #e2e8f0 !important;
+}
+
+.admin-theme-light header {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  border-bottom-color: #e2e8f0 !important;
+}
+
+.admin-theme-light .bg-zinc-900,
+.admin-theme-light .bg-zinc-900\/30,
+.admin-theme-light .bg-zinc-900\/40,
+.admin-theme-light .bg-zinc-900\/50,
+.admin-theme-light .bg-zinc-900\/60,
+.admin-theme-light .bg-zinc-900\/70,
+.admin-theme-light .bg-zinc-900\/80 {
+  background-color: #ffffff !important;
+}
+
+.admin-theme-light .bg-zinc-800,
+.admin-theme-light .bg-zinc-800\/60,
+.admin-theme-light .bg-zinc-800\/80 {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* Border overrides */
+.admin-theme-light .border-zinc-800,
+.admin-theme-light .border-zinc-800\/80,
+.admin-theme-light .border-zinc-700,
+.admin-theme-light .border-zinc-700\/60 {
+  border-color: #e2e8f0 !important;
+}
+
+.admin-theme-light .hover\:border-zinc-700:hover {
+  border-color: #cbd5e1 !important;
+}
+
+/* Text overrides */
+.admin-theme-light .text-zinc-100,
+.admin-theme-light .text-zinc-200 {
+  color: #0f172a !important;
+}
+
+.admin-theme-light .text-zinc-300 {
+  color: #334155 !important;
+}
+
+.admin-theme-light .text-zinc-400 {
+  color: #64748b !important;
+}
+
+.admin-theme-light .text-zinc-500 {
+  color: #94a3b8 !important;
+}
+
+.admin-theme-light .text-zinc-600 {
+  color: #cbd5e1 !important;
+}
+
+/* Primary buttons (Inverted: Solid dark in Light mode) */
+.admin-theme-light .bg-zinc-100 {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+}
+.admin-theme-light .bg-zinc-100:hover,
+.admin-theme-light .hover\:bg-zinc-200:hover {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+.admin-theme-light .bg-zinc-100 svg,
+.admin-theme-light .bg-zinc-100 span {
+  color: #ffffff !important;
+}
+
+/* Secondary & Interactive Buttons */
+.admin-theme-light button.border-zinc-800.bg-zinc-900,
+.admin-theme-light a.border-zinc-800.bg-zinc-900 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+.admin-theme-light button.border-zinc-800.bg-zinc-900:hover,
+.admin-theme-light a.border-zinc-800.bg-zinc-900:hover {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+}
+
+.admin-theme-light .hover\:bg-zinc-900:hover {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.admin-theme-light .hover\:bg-zinc-800:hover {
+  background-color: #e2e8f0 !important;
+}
+
+/* Inputs & Form controls */
+.admin-theme-light input,
+.admin-theme-light textarea {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.admin-theme-light input::placeholder,
+.admin-theme-light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+.admin-theme-light input:focus,
+.admin-theme-light textarea:focus {
+  border-color: #64748b !important;
+  box-shadow: 0 0 0 1px #64748b !important;
+}
+
+/* Dialogs & Modals */
+.admin-theme-light .shadow-2xl,
+.admin-theme-light .bg-zinc-950.shadow-2xl,
+.admin-theme-light .bg-zinc-950.border-zinc-800 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Cards subtle elevation */
+.admin-theme-light .shadow-sm {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Dropzone in light mode */
+.admin-theme-light .border-dashed {
+  border-color: #cbd5e1 !important;
+  background-color: rgba(248, 250, 252, 0.8) !important;
+}
+.admin-theme-light .border-dashed:hover {
+  border-color: #94a3b8 !important;
+  background-color: #f1f5f9 !important;
+}
+
+/* Brand icon badge in sidebar */
+.admin-theme-light .w-9.h-9.rounded-lg.bg-zinc-100 {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+}
+

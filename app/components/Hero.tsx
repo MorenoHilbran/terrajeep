@@ -1,6 +1,6 @@
 'use client'
 
-export default function Hero() {
+export default function Hero({ reviewUrl = 'https://share.google/csqO5RheRkpH7AVh4' }: { reviewUrl?: string }) {
   const features = [
     {
       icon: (
@@ -138,7 +138,7 @@ export default function Hero() {
 
           {/* Google Maps Review / Rating Bubble */}
           <a
-            href="https://maps.google.com/?q=parkir+lama+tour+batur"
+            href={reviewUrl}
             target="_blank"
             rel="noopener noreferrer"
             style={{

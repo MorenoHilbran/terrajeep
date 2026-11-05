@@ -1,0 +1,26 @@
+# ==============================================================================
+# TERRA JEEP ADVENTURES - CPANEL / LITESPEED CONFIGURATION
+# ==============================================================================
+
+# 1. Force HTTPS
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Serve static assets (_next/static, images, uploads) directly if file exists
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+</IfModule>
+
+# 2. Browser Caching for Next.js Chunks and Images
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 2 days"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+</IfModule>
+

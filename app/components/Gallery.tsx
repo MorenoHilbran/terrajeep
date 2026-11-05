@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-const images = [
+const defaultImages = [
   '/images/jeep-1.jpeg',
   '/images/jeep-2.jpeg',
   '/images/tracking-gunungbatur-.jpg',
@@ -25,7 +25,12 @@ const images = [
 
 const VISIBLE = 6
 
-export default function Gallery() {
+interface GalleryProps {
+  items?: Array<{ src: string; title?: string }>
+}
+
+export default function Gallery({ items }: GalleryProps) {
+  const images = items && items.length > 0 ? items.map((it) => it.src) : defaultImages
   const [startIndex, setStartIndex] = useState(0)
 
   const totalSlides = Math.ceil(images.length / VISIBLE)
@@ -65,24 +70,26 @@ export default function Gallery() {
         </div>
 
         {/* Dots */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 24 }}>
-          {Array.from({ length: totalSlides }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goTo(i)}
-              style={{
-                width: i === currentSlide ? 32 : 8,
-                height: 8,
-                borderRadius: 4,
-                backgroundColor: i === currentSlide ? '#7B2D1F' : '#C8B89A',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 0,
-                transition: 'width 0.2s',
-              }}
-            />
-          ))}
-        </div>
+        {totalSlides > 1 && (
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 24 }}>
+            {Array.from({ length: totalSlides }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goTo(i)}
+                style={{
+                  width: i === currentSlide ? 32 : 8,
+                  height: 8,
+                  borderRadius: 4,
+                  backgroundColor: i === currentSlide ? '#7B2D1F' : '#C8B89A',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  transition: 'width 0.2s',
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )

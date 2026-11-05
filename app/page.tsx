@@ -8,17 +8,26 @@ import Gallery from './components/Gallery'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import WhatsAppButton from './components/WhatsAppButton'
+import { getGallery, getPackages, getSettings } from '@/lib/data'
 
-export default function Home() {
+export const dynamic = 'force-dynamic'
+
+export default async function Home() {
+  const [galleryItems, packageItems, siteSettings] = await Promise.all([
+    getGallery(),
+    getPackages(),
+    getSettings(),
+  ])
+
   return (
     <main>
       <Navbar />
-      <Hero />
-      <Testimonials />
+      <Hero reviewUrl={siteSettings.googleReviewUrl} />
+      <Testimonials reviewUrl={siteSettings.googleReviewUrl} />
       <About />
-      <Products />
+      <Products items={packageItems} whatsappNumber={siteSettings.whatsappNumber} />
       <WhyChooseUs />
-      <Gallery />
+      <Gallery items={galleryItems} />
       <Contact />
       <Footer />
       <WhatsAppButton />

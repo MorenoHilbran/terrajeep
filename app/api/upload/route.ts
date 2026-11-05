@@ -2,11 +2,20 @@ import { NextResponse } from 'next/server'
 import { checkAuth } from '@/lib/auth'
 import fs from 'fs'
 import path from 'path'
-import sharp from 'sharp'
 
 // Maximum allowed photo file size: 5 MB
-export const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024
-export const MAX_FILE_SIZE_MB = 5
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024
+const MAX_FILE_SIZE_MB = 5
+
+// Safely load sharp with CJS require to avoid bundler runtime mangling
+function getSharp() {
+  try {
+    return require('sharp')
+  } catch (err) {
+    console.warn('Sharp module not available or failed to load:', err)
+    return null
+  }
+}
 
 export async function POST(request: Request) {
   const isAuthed = await checkAuth(request)
@@ -52,6 +61,7 @@ export async function POST(request: Request) {
     const uploadedPaths: string[] = []
     let totalOriginalBytes = 0
     let totalCompressedBytes = 0
+    const sharpInstance = getSharp()
 
     for (const file of files) {
       // Validate file type
@@ -65,46 +75,59 @@ export async function POST(request: Request) {
       const inputBuffer = Buffer.from(bytes)
       totalOriginalBytes += inputBuffer.length
 
-      // Sanitize base name and enforce .webp extension
       const ext = path.extname(file.name)
       const baseClean = path.basename(file.name, ext).replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase() || 'photo'
-      const uniqueName = `img_${Date.now()}_${Math.random().toString(36).substring(2, 7)}_${baseClean}.webp`
-      const targetPath = path.join(uploadsDir, uniqueName)
 
-      // Auto-compress and convert to modern WebP format using Sharp:
-      // - .rotate(): Preserves correct camera/phone orientation (EXIF)
-      // - .resize(): Limits maximum resolution to 2048x2048 without upscaling smaller images
-      // - .webp(): Quality 82 provides crisp visual fidelity with dramatic file size reduction (typically 50-80% smaller)
-      const webpBuffer = await sharp(inputBuffer)
-        .rotate()
-        .resize({
-          width: 2048,
-          height: 2048,
-          fit: 'inside',
-          withoutEnlargement: true,
-        })
-        .webp({
-          quality: 82,
-          effort: 4,
-        })
-        .toBuffer()
+      // If sharp is available, convert & compress to WebP
+      if (sharpInstance) {
+        try {
+          const webpBuffer = await sharpInstance(inputBuffer)
+            .rotate()
+            .resize({
+              width: 2048,
+              height: 2048,
+              fit: 'inside',
+              withoutEnlargement: true,
+            })
+            .webp({
+              quality: 82,
+              effort: 4,
+            })
+            .toBuffer()
 
-      fs.writeFileSync(targetPath, webpBuffer)
-      totalCompressedBytes += webpBuffer.length
-      uploadedPaths.push(`/uploads/${uniqueName}`)
+          const uniqueName = `img_${Date.now()}_${Math.random().toString(36).substring(2, 7)}_${baseClean}.webp`
+          const targetPath = path.join(uploadsDir, uniqueName)
+          fs.writeFileSync(targetPath, webpBuffer)
+
+          totalCompressedBytes += webpBuffer.length
+          uploadedPaths.push(`/uploads/${uniqueName}`)
+          continue
+        } catch (sharpError) {
+          console.warn('Sharp compression failed, falling back to direct save:', sharpError)
+        }
+      }
+
+      // Fallback: save original buffer directly (prevents 500 crashes)
+      const safeExt = ext.toLowerCase() || '.jpg'
+      const fallbackName = `img_${Date.now()}_${Math.random().toString(36).substring(2, 7)}_${baseClean}${safeExt}`
+      const fallbackPath = path.join(uploadsDir, fallbackName)
+      fs.writeFileSync(fallbackPath, inputBuffer)
+
+      totalCompressedBytes += inputBuffer.length
+      uploadedPaths.push(`/uploads/${fallbackName}`)
     }
 
     if (uploadedPaths.length === 0) {
       return NextResponse.json({ success: false, message: 'Format file tidak didukung. Harap gunakan format JPG, PNG, atau WEBP.' }, { status: 400 })
     }
 
-    const savedPercent = totalOriginalBytes > 0
+    const savedPercent = totalOriginalBytes > 0 && totalCompressedBytes < totalOriginalBytes
       ? Math.max(0, Math.round(((totalOriginalBytes - totalCompressedBytes) / totalOriginalBytes) * 100))
       : 0
 
     return NextResponse.json({
       success: true,
-      message: `${uploadedPaths.length} foto berhasil dioptimasi & dikonversi ke WebP!`,
+      message: `${uploadedPaths.length} foto berhasil diunggah!`,
       urls: uploadedPaths,
       url: uploadedPaths[0],
       savedPercent,
@@ -113,6 +136,6 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     console.error('Error in upload POST:', error)
-    return NextResponse.json({ success: false, message: 'Gagal mengunggah dan mengompresi foto' }, { status: 500 })
+    return NextResponse.json({ success: false, message: 'Gagal mengunggah foto' }, { status: 500 })
   }
 }

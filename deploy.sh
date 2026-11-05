@@ -123,6 +123,7 @@ cd "$APP_DIR"
 # Tambahkan path Node.js ke PATH session ini
 NODE_DIR=$(dirname "$NODE_BIN")
 export PATH="$NODE_DIR:$PATH"
+export NEXT_USE_WEBPACK=true
 
 if [ ! -d "$APP_DIR/node_modules" ] || [ "$REPO_DIR/package.json" -nt "$APP_DIR/node_modules" ]; then
     log "package.json baru terdeteksi, menjalankan npm install..."
@@ -131,8 +132,8 @@ else
     log "node_modules sudah mutakhir. Melewati npm install untuk menghemat waktu."
 fi
 
-# 5. Build Next.js Production
-log "Menjalankan Next.js production build..."
+# 5. Build Next.js Production (menggunakan Webpack agar binary sharp ter-link secara benar)
+log "Menjalankan Next.js production build via Webpack..."
 "$NPM_BIN" run build
 
 # 6. Salin static assets ke document root agar dilayani langsung oleh LiteSpeed/Nginx (Cepat & Hemat RAM)

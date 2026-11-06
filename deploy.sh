@@ -195,6 +195,8 @@ fi
 log "Merestart aplikasi Node.js (Passenger reload signal)"
 
 touch "$APP_DIR/tmp/restart.txt"
+# Hentikan proses node lama agar Passenger memuat kode dan bundle baru secara instan
+pkill -u "$USER" -f "$APP_DIR/server.js" 2>/dev/null || true
 
 # 8. Verifikasi hasil deployment
 [ -d "$APP_DIR/.next" ] || fail "Build .next tidak ditemukan"

@@ -13,14 +13,21 @@
     RewriteRule ^ - [L]
 </IfModule>
 
-# 2. Browser Caching for Next.js Chunks and Images
+# 2. Prevent Caching on Dynamic API Routes and Admin
+<IfModule mod_headers.c>
+    <FilesMatch "\.(json|php)$">
+        Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
+</IfModule>
+
+# 3. Browser Caching for Static Assets Only
 <IfModule mod_expires.c>
     ExpiresActive On
-    ExpiresDefault "access plus 2 days"
     ExpiresByType image/webp "access plus 1 month"
     ExpiresByType image/jpeg "access plus 1 month"
     ExpiresByType image/png "access plus 1 month"
     ExpiresByType text/css "access plus 1 year"
     ExpiresByType application/javascript "access plus 1 year"
 </IfModule>
-

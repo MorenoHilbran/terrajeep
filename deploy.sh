@@ -156,11 +156,33 @@ if [ -d "$APP_DIR/.next/static" ]; then
     cp -rf "$APP_DIR/.next/static/"* "$PUBLIC_DIR/_next/static/" 2>/dev/null || true
 fi
 
-# Public images & icons
+# Public images & icons (kecualikan .htaccess agar konfigurasi Passenger CloudLinux tidak tertimpa!)
 if [ -d "$APP_DIR/public" ]; then
     tar \
         --exclude='./uploads' \
+        --exclude='./.htaccess' \
         -cf - -C "$APP_DIR/public" . | tar -C "$PUBLIC_DIR" -xf -
+fi
+
+# Pastikan konfigurasi Passenger CloudLinux tetap ada di document root .htaccess agar tidak 403 Forbidden
+if ! grep -q "PassengerAppRoot" "$PUBLIC_DIR/.htaccess" 2>/dev/null; then
+    log "Menjaga konfigurasi Passenger CloudLinux di $PUBLIC_DIR/.htaccess..."
+    TMP_HTACCESS=$(mktemp)
+    cat <<HTACCESS > "$TMP_HTACCESS"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "$APP_DIR"
+PassengerBaseURI "/"
+PassengerNodejs "$NODE_BIN"
+PassengerAppType node
+PassengerStartupFile server.js
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+
+HTACCESS
+    if [ -f "$PUBLIC_DIR/.htaccess" ]; then
+        cat "$PUBLIC_DIR/.htaccess" >> "$TMP_HTACCESS"
+    fi
+    mv "$TMP_HTACCESS" "$PUBLIC_DIR/.htaccess"
+    chmod 644 "$PUBLIC_DIR/.htaccess"
 fi
 
 # Uploads sync & symlink ke document root (agar foto yang baru diupload seketika bisa diakses)

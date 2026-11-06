@@ -2,6 +2,15 @@ import { NextResponse } from 'next/server'
 import { getSettings, saveSettings } from '@/lib/data'
 import { checkAuth } from '@/lib/auth'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+const NO_CACHE_HEADERS = {
+  'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
+  'Pragma': 'no-cache',
+  'Expires': '0',
+}
+
 export async function GET() {
   const settings = await getSettings()
   // Exclude password from GET response for safety
@@ -13,7 +22,7 @@ export async function GET() {
       siteTitle: settings.siteTitle,
       whatsappNumber: settings.whatsappNumber,
     },
-  })
+  }, { headers: NO_CACHE_HEADERS })
 }
 
 export async function POST(request: Request) {

@@ -3,6 +3,9 @@ import { checkAuth } from '@/lib/auth'
 import fs from 'fs'
 import path from 'path'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 // Maximum allowed photo file size: 5 MB
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024
 const MAX_FILE_SIZE_MB = 5
@@ -53,30 +56,24 @@ export async function POST(request: Request) {
       }
     }
 
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true })
-    }
-
     // Determine all upload target locations (ensuring cPanel document root is synchronized)
-    const targetDirs = [uploadsDir]
-    const docRootUploads = '/home/sdnt7854/public_html/terrajeepadventures.com/uploads'
-    if (fs.existsSync('/home/sdnt7854/public_html/terrajeepadventures.com')) {
-      if (!fs.existsSync(docRootUploads)) {
-        try { fs.mkdirSync(docRootUploads, { recursive: true }) } catch (_) {}
-      }
+    const possibleDirs = [
+      path.join(process.cwd(), 'public', 'uploads'),
+      '/home/sdnt7854/terrajeepadventures/public/uploads',
+      '/home/sdnt7854/public_html/terrajeepadventures.com/uploads',
+    ]
+
+    const targetDirs: string[] = []
+    for (const d of possibleDirs) {
       try {
-        if (fs.existsSync(docRootUploads)) {
-          const realDoc = fs.realpathSync(docRootUploads)
-          const realPrimary = fs.realpathSync(uploadsDir)
-          if (realDoc !== realPrimary && !targetDirs.includes(docRootUploads)) {
-            targetDirs.push(docRootUploads)
-          }
+        if (!fs.existsSync(d)) {
+          fs.mkdirSync(d, { recursive: true })
         }
-      } catch (_) {
-        if (!targetDirs.includes(docRootUploads)) {
-          targetDirs.push(docRootUploads)
+        if (fs.existsSync(d) && !targetDirs.includes(d)) {
+          targetDirs.push(d)
         }
+      } catch (err) {
+        console.warn(`Could not prepare upload dir ${d}:`, err)
       }
     }
 
@@ -86,7 +83,9 @@ export async function POST(request: Request) {
           if (!fs.existsSync(d)) {
             fs.mkdirSync(d, { recursive: true })
           }
-          fs.writeFileSync(path.join(d, filename), buf)
+          const fullPath = path.join(d, filename)
+          fs.writeFileSync(fullPath, buf)
+          try { fs.chmodSync(fullPath, 0o644) } catch (_) {}
         } catch (err) {
           console.warn(`Failed writing to ${d}:`, err)
         }

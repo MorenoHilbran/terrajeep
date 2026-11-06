@@ -82,10 +82,11 @@ export default function AdminPage() {
           setUsername(authData.username)
         }
 
+        const cacheBuster = `_t=${Date.now()}`
         const [galRes, pkgRes, setRes] = await Promise.all([
-          fetch('/api/gallery'),
-          fetch('/api/packages'),
-          fetch('/api/settings'),
+          fetch(`/api/gallery?${cacheBuster}`, { cache: 'no-store' }),
+          fetch(`/api/packages?${cacheBuster}`, { cache: 'no-store' }),
+          fetch(`/api/settings?${cacheBuster}`, { cache: 'no-store' }),
         ])
 
         const galData = await galRes.json()

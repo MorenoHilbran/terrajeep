@@ -33,24 +33,46 @@ export interface SiteSettings {
   whatsappNumber: string
 }
 
-const DATA_DIR = path.join(process.cwd(), 'data')
-const GALLERY_FILE = path.join(DATA_DIR, 'gallery.json')
-const PACKAGES_FILE = path.join(DATA_DIR, 'packages.json')
-const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json')
+function getDataDir(): string {
+  const custom = process.env.DATA_DIR
+  if (custom && fs.existsSync(custom)) return custom
+
+  const candidates = [
+    '/home/sdnt7854/terrajeepadventures/data',
+    '/home/sdnt7854/terrajeep/data',
+    path.join(process.cwd(), 'data'),
+  ]
+
+  for (const c of candidates) {
+    if (fs.existsSync(c)) return c
+  }
+
+  const defaultDir = path.join(process.cwd(), 'data')
+  ensureDirExists(defaultDir)
+  return defaultDir
+}
+
+function getFilePath(filename: string): string {
+  const dir = getDataDir()
+  ensureDirExists(dir)
+  return path.join(dir, filename)
+}
 
 function ensureDirExists(dir: string) {
   if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true })
+    try {
+      fs.mkdirSync(dir, { recursive: true })
+    } catch (_) {}
   }
 }
 
 export async function getGallery(): Promise<GalleryItem[]> {
   try {
-    ensureDirExists(DATA_DIR)
-    if (!fs.existsSync(GALLERY_FILE)) {
+    const file = getFilePath('gallery.json')
+    if (!fs.existsSync(file)) {
       return []
     }
-    const content = fs.readFileSync(GALLERY_FILE, 'utf-8')
+    const content = fs.readFileSync(file, 'utf-8')
     return JSON.parse(content)
   } catch (error) {
     console.error('Error reading gallery:', error)
@@ -60,8 +82,14 @@ export async function getGallery(): Promise<GalleryItem[]> {
 
 export async function saveGallery(items: GalleryItem[]): Promise<boolean> {
   try {
-    ensureDirExists(DATA_DIR)
-    fs.writeFileSync(GALLERY_FILE, JSON.stringify(items, null, 2), 'utf-8')
+    const file = getFilePath('gallery.json')
+    fs.writeFileSync(file, JSON.stringify(items, null, 2), 'utf-8')
+    
+    // Also save to secondary candidate if exists
+    const prodFile = '/home/sdnt7854/terrajeepadventures/data/gallery.json'
+    if (fs.existsSync('/home/sdnt7854/terrajeepadventures/data') && file !== prodFile) {
+      try { fs.writeFileSync(prodFile, JSON.stringify(items, null, 2), 'utf-8') } catch (_) {}
+    }
     return true
   } catch (error) {
     console.error('Error saving gallery:', error)
@@ -71,11 +99,11 @@ export async function saveGallery(items: GalleryItem[]): Promise<boolean> {
 
 export async function getPackages(): Promise<PackageItem[]> {
   try {
-    ensureDirExists(DATA_DIR)
-    if (!fs.existsSync(PACKAGES_FILE)) {
+    const file = getFilePath('packages.json')
+    if (!fs.existsSync(file)) {
       return []
     }
-    const content = fs.readFileSync(PACKAGES_FILE, 'utf-8')
+    const content = fs.readFileSync(file, 'utf-8')
     return JSON.parse(content)
   } catch (error) {
     console.error('Error reading packages:', error)
@@ -85,8 +113,13 @@ export async function getPackages(): Promise<PackageItem[]> {
 
 export async function savePackages(items: PackageItem[]): Promise<boolean> {
   try {
-    ensureDirExists(DATA_DIR)
-    fs.writeFileSync(PACKAGES_FILE, JSON.stringify(items, null, 2), 'utf-8')
+    const file = getFilePath('packages.json')
+    fs.writeFileSync(file, JSON.stringify(items, null, 2), 'utf-8')
+    
+    const prodFile = '/home/sdnt7854/terrajeepadventures/data/packages.json'
+    if (fs.existsSync('/home/sdnt7854/terrajeepadventures/data') && file !== prodFile) {
+      try { fs.writeFileSync(prodFile, JSON.stringify(items, null, 2), 'utf-8') } catch (_) {}
+    }
     return true
   } catch (error) {
     console.error('Error saving packages:', error)
@@ -104,12 +137,12 @@ const DEFAULT_SETTINGS: SiteSettings = {
 
 export async function getSettings(): Promise<SiteSettings> {
   try {
-    ensureDirExists(DATA_DIR)
-    if (!fs.existsSync(SETTINGS_FILE)) {
-      fs.writeFileSync(SETTINGS_FILE, JSON.stringify(DEFAULT_SETTINGS, null, 2), 'utf-8')
+    const file = getFilePath('settings.json')
+    if (!fs.existsSync(file)) {
+      fs.writeFileSync(file, JSON.stringify(DEFAULT_SETTINGS, null, 2), 'utf-8')
       return DEFAULT_SETTINGS
     }
-    const content = fs.readFileSync(SETTINGS_FILE, 'utf-8')
+    const content = fs.readFileSync(file, 'utf-8')
     const parsed = JSON.parse(content)
     return { ...DEFAULT_SETTINGS, ...parsed }
   } catch (error) {
@@ -120,10 +153,15 @@ export async function getSettings(): Promise<SiteSettings> {
 
 export async function saveSettings(settings: Partial<SiteSettings>): Promise<boolean> {
   try {
-    ensureDirExists(DATA_DIR)
+    const file = getFilePath('settings.json')
     const current = await getSettings()
     const updated = { ...current, ...settings }
-    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(updated, null, 2), 'utf-8')
+    fs.writeFileSync(file, JSON.stringify(updated, null, 2), 'utf-8')
+    
+    const prodFile = '/home/sdnt7854/terrajeepadventures/data/settings.json'
+    if (fs.existsSync('/home/sdnt7854/terrajeepadventures/data') && file !== prodFile) {
+      try { fs.writeFileSync(prodFile, JSON.stringify(updated, null, 2), 'utf-8') } catch (_) {}
+    }
     return true
   } catch (error) {
     console.error('Error saving settings:', error)

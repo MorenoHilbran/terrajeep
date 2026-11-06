@@ -163,8 +163,9 @@ if [ -d "$APP_DIR/public" ]; then
         -cf - -C "$APP_DIR/public" . | tar -C "$PUBLIC_DIR" -xf -
 fi
 
-# Uploads sync ke document root
+# Uploads sync & symlink ke document root (agar foto yang baru diupload seketika bisa diakses)
 if [ -d "$PERSISTENT_UPLOADS" ]; then
+    mkdir -p "$PUBLIC_DIR/uploads"
     cp -rn "$PERSISTENT_UPLOADS/"* "$PUBLIC_DIR/uploads/" 2>/dev/null || true
 fi
 

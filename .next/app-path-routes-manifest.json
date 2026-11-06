@@ -8,8 +8,9 @@
   "/api/packages/route": "/api/packages",
   "/api/settings/route": "/api/settings",
   "/icon.jpg/route": "/icon.jpg",
-  "/api/upload/route": "/api/upload",
+  "/uploads/[filename]/route": "/uploads/[filename]",
   "/admin/page": "/admin",
   "/login/page": "/login",
-  "/page": "/"
+  "/page": "/",
+  "/api/upload/route": "/api/upload"
 }

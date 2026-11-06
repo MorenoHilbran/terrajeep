@@ -58,6 +58,41 @@ export async function POST(request: Request) {
       fs.mkdirSync(uploadsDir, { recursive: true })
     }
 
+    // Determine all upload target locations (ensuring cPanel document root is synchronized)
+    const targetDirs = [uploadsDir]
+    const docRootUploads = '/home/sdnt7854/public_html/terrajeepadventures.com/uploads'
+    if (fs.existsSync('/home/sdnt7854/public_html/terrajeepadventures.com')) {
+      if (!fs.existsSync(docRootUploads)) {
+        try { fs.mkdirSync(docRootUploads, { recursive: true }) } catch (_) {}
+      }
+      try {
+        if (fs.existsSync(docRootUploads)) {
+          const realDoc = fs.realpathSync(docRootUploads)
+          const realPrimary = fs.realpathSync(uploadsDir)
+          if (realDoc !== realPrimary && !targetDirs.includes(docRootUploads)) {
+            targetDirs.push(docRootUploads)
+          }
+        }
+      } catch (_) {
+        if (!targetDirs.includes(docRootUploads)) {
+          targetDirs.push(docRootUploads)
+        }
+      }
+    }
+
+    const saveBufferToTargets = (filename: string, buf: Buffer) => {
+      for (const d of targetDirs) {
+        try {
+          if (!fs.existsSync(d)) {
+            fs.mkdirSync(d, { recursive: true })
+          }
+          fs.writeFileSync(path.join(d, filename), buf)
+        } catch (err) {
+          console.warn(`Failed writing to ${d}:`, err)
+        }
+      }
+    }
+
     const uploadedPaths: string[] = []
     let totalOriginalBytes = 0
     let totalCompressedBytes = 0
@@ -96,8 +131,7 @@ export async function POST(request: Request) {
             .toBuffer()
 
           const uniqueName = `img_${Date.now()}_${Math.random().toString(36).substring(2, 7)}_${baseClean}.webp`
-          const targetPath = path.join(uploadsDir, uniqueName)
-          fs.writeFileSync(targetPath, webpBuffer)
+          saveBufferToTargets(uniqueName, webpBuffer)
 
           totalCompressedBytes += webpBuffer.length
           uploadedPaths.push(`/uploads/${uniqueName}`)
@@ -110,8 +144,7 @@ export async function POST(request: Request) {
       // Fallback: save original buffer directly (prevents 500 crashes)
       const safeExt = ext.toLowerCase() || '.jpg'
       const fallbackName = `img_${Date.now()}_${Math.random().toString(36).substring(2, 7)}_${baseClean}${safeExt}`
-      const fallbackPath = path.join(uploadsDir, fallbackName)
-      fs.writeFileSync(fallbackPath, inputBuffer)
+      saveBufferToTargets(fallbackName, inputBuffer)
 
       totalCompressedBytes += inputBuffer.length
       uploadedPaths.push(`/uploads/${fallbackName}`)

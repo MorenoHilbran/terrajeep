@@ -8,8 +8,9 @@
   "/api/packages/route": "app/api/packages/route.js",
   "/api/settings/route": "app/api/settings/route.js",
   "/icon.jpg/route": "app/icon.jpg/route.js",
-  "/api/upload/route": "app/api/upload/route.js",
+  "/uploads/[filename]/route": "app/uploads/[filename]/route.js",
   "/admin/page": "app/admin/page.js",
   "/login/page": "app/login/page.js",
-  "/page": "app/page.js"
+  "/page": "app/page.js",
+  "/api/upload/route": "app/api/upload/route.js"
 }

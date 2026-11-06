@@ -1,0 +1,1 @@
+globalThis.__RSC_MANIFEST=(globalThis.__RSC_MANIFEST||{});globalThis.__RSC_MANIFEST["/uploads/[filename]/route"]={"moduleLoading":{"prefix":"/_next/"},"ssrModuleMapping":{},"edgeSSRModuleMapping":{},"clientModules":{},"entryCSSFiles":{"C:\\TECHSOE PROJECT\\terrajeepadventures\\terra-adventure\\app\\uploads\\[filename]\\route":[]},"rscModuleMapping":{},"edgeRscModuleMapping":{}};

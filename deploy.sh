@@ -191,12 +191,13 @@ if [ -d "$PERSISTENT_UPLOADS" ]; then
     cp -rn "$PERSISTENT_UPLOADS/"* "$PUBLIC_DIR/uploads/" 2>/dev/null || true
 fi
 
-# 7. Restart Node.js Application (Phusion Passenger / CloudLinux)
-log "Merestart aplikasi Node.js (Passenger reload signal)"
+# 7. Restart Node.js Application (Phusion Passenger / LiteSpeed lsnode)
+log "Merestart aplikasi Node.js (Passenger & lsnode reload signal)"
 
 touch "$APP_DIR/tmp/restart.txt"
-# Hentikan proses node lama agar Passenger memuat kode dan bundle baru secara instan
-pkill -u "$USER" -f "$APP_DIR/server.js" 2>/dev/null || true
+# Hentikan proses lsnode lama agar LiteSpeed memuat kode dan bundle baru secara instan
+pkill -u "$USER" -9 -f "lsnode" 2>/dev/null || true
+pkill -u "$USER" -9 -f "$APP_DIR" 2>/dev/null || true
 
 # 8. Verifikasi hasil deployment
 [ -d "$APP_DIR/.next" ] || fail "Build .next tidak ditemukan"
